@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Список гостей</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+.card {
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+</style>
+</head>
+<body class="container mt-5">
+
+<h1 class="mb-4 text-uppercase fw-bold display-4 text-center">Список гостей</h1>
+
+<div class="text-center mb-4">
+  <button id="clearBtn" class="btn btn-danger">Очистить список</button>
+</div>
+
+<div class="card p-3 mb-4">
+  <h3 class="text-success">Придут</h3>
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Имена</th>
+          <th>Дата/Время</th>
+          <th>Присутствие</th>
+          <th>Трансфер</th>
+          <th>Алкоголь</th>
+        </tr>
+      </thead>
+      <tbody id="yesList"></tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card p-3">
+  <h3 class="text-danger">Не придут</h3>
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Имена</th>
+          <th>Дата/Время</th>
+          <th>Присутствие</th>
+          <th>Трансфер</th>
+          <th>Алкоголь</th>
+        </tr>
+      </thead>
+      <tbody id="noList"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+async function loadGuests() {
+  const guests = await (await fetch('/guests')).json();
+
+  const yesList = document.getElementById('yesList');
+  const noList = document.getElementById('noList');
+
+  yesList.innerHTML = '';
+  noList.innerHTML = '';
+
+  guests.forEach(g => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${g.allNames || ''}</td>
+      <td>${g.time ? new Date(g.time).toLocaleString() : ''}</td>
+      <td>${g.attendance || ''}</td>
+      <td>${g.transfer || ''}</td>
+      <td>${g.alcohol || ''}</td>
+    `;
+
+    if (g.attendance === 'Присутствую/присутствуем') {
+      yesList.appendChild(row);
+    } else {
+      noList.appendChild(row);
+    }
+  });
+}
+
+// загрузка и автообновление
+loadGuests();
+setInterval(loadGuests, 3000);
+
+// очистка списка
+document.getElementById('clearBtn').addEventListener('click', async () => {
+  if (!confirm("Очистить список гостей?")) return;
+
+  const response = await fetch('/clear-guests', {
+    method: 'POST'
+  });
+
+  alert(await response.text());
+  loadGuests();
+});
+</script>
+
+</body>
+</html>
