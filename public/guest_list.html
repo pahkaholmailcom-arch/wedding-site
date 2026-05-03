@@ -29,7 +29,6 @@
           <th>Дата/Время</th>
           <th>Присутствие</th>
           <th>Трансфер</th>
-          <th>Алкоголь</th>
         </tr>
       </thead>
       <tbody id="yesList"></tbody>
@@ -47,7 +46,6 @@
           <th>Дата/Время</th>
           <th>Присутствие</th>
           <th>Трансфер</th>
-          <th>Алкоголь</th>
         </tr>
       </thead>
       <tbody id="noList"></tbody>
@@ -72,7 +70,6 @@ async function loadGuests() {
       <td>${g.time ? new Date(g.time).toLocaleString() : ''}</td>
       <td>${g.attendance || ''}</td>
       <td>${g.transfer || ''}</td>
-      <td>${g.alcohol || ''}</td>
     `;
 
     if (g.attendance === 'Присутствую/присутствуем') {
