@@ -1,103 +1,97 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<title>Дорогие гости</title>
+    <meta charset="UTF-8">
+    <title>Дорогие гости</title>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-<style>
-body {
-    background-image: url('photo.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-}
+    <style>
+        body {
+            background-image: url('photo.jpg'); /* ваша картинка в папке public */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
 
-.card {
-    background-color: rgba(255, 255, 255, 0.85);
-}
-</style>
+        /* полупрозрачная карточка для формы */
+        .card {
+            background-color: rgba(255, 255, 255, 0.85);
+        }
+    </style>
 </head>
 
 <body class="container mt-5">
 
-<h1 class="mb-4 text-uppercase fw-bold display-4 text-center text-dark">
-Дорогие гости
-</h1>
+    <h1 class="mb-4 text-uppercase fw-bold display-4 text-center text-dark">
+        Дорогие гости
+    </h1>
 
-<div class="card p-4 mx-auto" style="max-width: 500px;">
-  <h4 class="mb-3">Уделите нам одну минутку</h4>
+    <div class="card p-4 mx-auto" style="max-width: 500px;">
+        <h4 class="mb-3">Уделите нам одну минутку</h4>
 
-  <form id="rsvpForm">
+        <form id="rsvpForm">
 
-    <div class="mb-3">
-      <label class="form-label">
-        1) Укажите Ваши имена:
-      </label>
-      <input type="text" id="allNames" class="form-control" required>
+            <!-- Вопрос 1 -->
+            <div class="mb-3">
+                <label class="form-label">
+                    1) Укажите Ваши имена (Вы пара или семья — укажите имена всех членов):
+                </label>
+                <input type="text" id="allNames" class="form-control" placeholder="Иван, Мария" required>
+            </div>
+
+            <!-- Вопрос 2 -->
+            <div class="mb-3">
+                <label class="form-label">2) Присутствие на свадьбе:</label>
+                <select id="attendance" class="form-select" required>
+                    <option value="">Выберите</option>
+                    <option value="Присутствую/присутствуем">Подтверждаю присутствие</option>
+                    <option value="Не смогу/не сможем">К сожалению, не смогу/не сможем</option>
+                </select>
+            </div>
+
+            <!-- Вопрос 3 -->
+            <div class="mb-3">
+                <label class="form-label">3) Трансфер:</label>
+                <select id="transfer" class="form-select">
+                    <option value="">Выберите</option>
+                    <option value="Самостоятельно">Я/мы буду/будем добираться сами</option>
+                    <option value="На трансфере">Буду добираться на трансфере, предложенном молодоженами</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">
+                Отправить
+            </button>
+
+        </form>
     </div>
 
-    <div class="mb-3">
-      <label class="form-label">
-        2) Присутствие:
-      </label>
-      <select id="attendance" class="form-select" required>
-        <option value="">Выберите</option>
-        <option value="Присутствую">Подтверждаю присутствие</option>
-        <option value="Не смогу">К сожалению, не смогу</option>
-      </select>
-    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <div class="mb-3">
-      <label class="form-label">
-        3) Трансфер:
-      </label>
-      <select id="transfer" class="form-select">
-        <option value="">Выберите</option>
-        <option value="Самостоятельно">Самостоятельно</option>
-        <option value="На трансфере">На трансфере</option>
-      </select>
-    </div>
+    <script>
+        const form = document.getElementById('rsvpForm');
 
-    <button type="submit" class="btn btn-primary w-100">
-      Отправить
-    </button>
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
 
-  </form>
-</div>
+            const response = await fetch('/rsvp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    allNames: document.getElementById('allNames').value,
+                    attendance: document.getElementById('attendance').value,
+                    transfer: document.getElementById('transfer').value,
+                })
+            });
 
-<script>
-const form = document.getElementById('rsvpForm');
-
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
-
-  try {
-    fetch('/guests', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({
-    allNames: document.getElementById('allNames').value,
-    attendance: document.getElementById('attendance').value,
-    transfer: document.getElementById('transfer').value
-  })
-});
-    );
-
-    const text = await response.text();
-    alert("Спасибо! Ответ отправлен 💖");
-    form.reset();
-
-  } catch (err) {
-    alert("Ошибка отправки 😢");
-    console.error(err);
-  }
-});
-</script>
+            alert(await response.text());
+            form.reset();
+        });
+    </script>
 
 </body>
 </html>
