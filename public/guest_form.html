@@ -75,17 +75,7 @@ form.addEventListener('submit', async (e) => {
   e.preventDefault();
 
   try {
-    const response = await fetch(
-      'https://script.google.com/macros/s/AKfycbwSh_bDmSK-f-kns_QG0skYryzD9Hx9vow6h-Nir5qUrEe9Zpeu7p5ahNcbw225xMwE/exec',
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          allNames: document.getElementById('allNames').value,
-          attendance: document.getElementById('attendance').value,
-          transfer: document.getElementById('transfer').value
-        })
-      }
+    fetch('/rsvp', {
     );
 
     const text = await response.text();
