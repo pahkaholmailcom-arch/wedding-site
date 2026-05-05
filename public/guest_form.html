@@ -74,16 +74,13 @@ form.addEventListener('submit', async (e) => {
 
   try {
     await fetch('https://script.google.com/macros/s/AKfycbwSh_bDmSK-f-kns_QG0skYryzD9Hx9vow6h-Nir5qUrEe9Zpeu7p5ahNcbw225xMwE/exec', {
-      method: 'POST',
-      body: JSON.stringify({
-        allNames,
-        attendance,
-        transfer
-      }),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
+  method: 'POST',
+  body: new URLSearchParams({
+    allNames,
+    attendance,
+    transfer
+  })
+});
 
     alert("Спасибо! Ответ отправлен 💖");
     form.reset();
