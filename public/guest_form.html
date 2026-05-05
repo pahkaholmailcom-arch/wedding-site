@@ -75,7 +75,17 @@ form.addEventListener('submit', async (e) => {
   e.preventDefault();
 
   try {
-    fetch('/rsvp', {
+    fetch('/guests', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    allNames: document.getElementById('allNames').value,
+    attendance: document.getElementById('attendance').value,
+    transfer: document.getElementById('transfer').value
+  })
+});
     );
 
     const text = await response.text();
