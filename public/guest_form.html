@@ -6,34 +6,39 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
 body {
-    background-image: url('photo.jpg'); /* ваша картинка в папке public */
+    background-image: url('photo.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
 }
 
-/* полупрозрачная карточка для формы */
 .card {
     background-color: rgba(255, 255, 255, 0.85);
 }
 </style>
 </head>
+
 <body class="container mt-5">
-<h1 class="mb-4 text-uppercase fw-bold display-4 text-center text-dark">Дорогие гости</h1>
+
+<h1 class="mb-4 text-uppercase fw-bold display-4 text-center text-dark">
+  Дорогие гости
+</h1>
 
 <div class="card p-4 mx-auto" style="max-width: 500px;">
   <h4 class="mb-3">Уделите нам одну минутку</h4>
+
   <form id="rsvpForm">
-    <!-- Вопрос 1 -->
+
     <div class="mb-3">
-      <label class="form-label">1) Укажите Ваши имена ( Вы пара или семья -  укажите имена всех членов):</label>
+      <label class="form-label">
+        1) Укажите Ваши имена (если пара/семья — всех):
+      </label>
       <input type="text" id="allNames" class="form-control" placeholder="Иван, Мария" required>
     </div>
 
-    <!-- Вопрос 2 -->
     <div class="mb-3">
-      <label class="form-label">2) Присутствие на свадьбе::</label>
+      <label class="form-label">2) Присутствие на свадьбе:</label>
       <select id="attendance" class="form-select" required>
         <option value="">Выберите</option>
         <option value="Присутствую/присутствуем">Подтверждаю присутствие</option>
@@ -41,37 +46,53 @@ body {
       </select>
     </div>
 
-    <!-- Вопрос 3 -->
     <div class="mb-3">
       <label class="form-label">3) Трансфер:</label>
       <select id="transfer" class="form-select">
         <option value="">Выберите</option>
-        <option value="Самостоятельно">Я/мы буду/будем добираться сам/сами</option>
-        <option value="На трансфере">Буду добираться на трансфере, предложенном молодоженами</option>
+        <option value="Самостоятельно">Самостоятельно</option>
+        <option value="На трансфере">На трансфере</option>
       </select>
     </div>
 
-    <button type="submit" class="btn btn-primary w-100">Отправить</button>
+    <button type="submit" class="btn btn-primary w-100">
+      Отправить
+    </button>
+
   </form>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 const form = document.getElementById('rsvpForm');
+
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
-  const response = await fetch('/rsvp', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      allNames: document.getElementById('allNames').value,
-      attendance: document.getElementById('attendance').value,
-      transfer: document.getElementById('transfer').value,
-    })
-  });
-  alert(await response.text());
-  form.reset();
+
+  const allNames = document.getElementById('allNames').value;
+  const attendance = document.getElementById('attendance').value;
+  const transfer = document.getElementById('transfer').value;
+
+  try {
+    await fetch('https://script.google.com/macros/s/AKfycbwSh_bDmSK-f-kns_QG0skYryzD9Hx9vow6h-Nir5qUrEe9Zpeu7p5ahNcbw225xMwE/exec', {
+      method: 'POST',
+      body: JSON.stringify({
+        allNames,
+        attendance,
+        transfer
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    alert("Спасибо! Ответ отправлен 💖");
+    form.reset();
+
+  } catch (error) {
+    alert("Ошибка отправки 😢");
+  }
 });
 </script>
+
 </body>
 </html>
