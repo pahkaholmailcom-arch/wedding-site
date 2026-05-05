@@ -14,7 +14,8 @@ body {
 }
 
 .card {
-    background-color: rgba(255, 255, 255, 0.85);
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
 }
 </style>
 </head>
@@ -26,7 +27,7 @@ body {
 </h1>
 
 <div class="card p-4 mx-auto" style="max-width: 500px;">
-  <h4 class="mb-3">Уделите нам одну минутку</h4>
+  <h4 class="mb-3 text-center">Уделите нам одну минутку 💖</h4>
 
   <form id="rsvpForm">
 
@@ -74,13 +75,14 @@ form.addEventListener('submit', async (e) => {
 
   try {
     await fetch('https://script.google.com/macros/s/AKfycbwSh_bDmSK-f-kns_QG0skYryzD9Hx9vow6h-Nir5qUrEe9Zpeu7p5ahNcbw225xMwE/exec', {
-  method: 'POST',
-  body: new URLSearchParams({
-    allNames,
-    attendance,
-    transfer
-  })
-});
+      method: 'POST',
+      mode: 'no-cors',
+      body: new URLSearchParams({
+        allNames,
+        attendance,
+        transfer
+      })
+    });
 
     alert("Спасибо! Ответ отправлен 💖");
     form.reset();
